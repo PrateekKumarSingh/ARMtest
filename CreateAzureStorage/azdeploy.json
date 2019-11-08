@@ -39,50 +39,6 @@
             }
         },
         {
-            "type": "microsoft.insights/autoscalesettings",
-            "apiVersion": "2014-04-01",
-            "name": "[parameters('autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name')]",
-            "location": "Southeast Asia",
-            "properties": {
-                "profiles": [
-                    {
-                        "name": "Auto created scale condition",
-                        "capacity": {
-                            "minimum": "1",
-                            "maximum": "2",
-                            "default": "1"
-                        },
-                        "rules": [
-                            {
-                                "metricTrigger": {
-                                    "metricName": "CpuPercentage",
-                                    "metricNamespace": "microsoft.web/serverfarms",
-                                    "metricResourceUri": "[parameters('serverFarms_ASP_demoresourcegroup_9929_externalid')]",
-                                    "timeGrain": "PT1M",
-                                    "statistic": "Average",
-                                    "timeWindow": "PT10M",
-                                    "timeAggregation": "Average",
-                                    "operator": "GreaterThan",
-                                    "threshold": 70,
-                                    "dimensions": [],
-                                    "dividePerInstance": false
-                                },
-                                "scaleAction": {
-                                    "direction": "Increase",
-                                    "type": "ChangeCount",
-                                    "value": "1",
-                                    "cooldown": "PT5M"
-                                }
-                            }
-                        ]
-                    }
-                ],
-                "enabled": true,
-                "name": "[parameters('autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name')]",
-                "targetResourceUri": "[parameters('serverFarms_ASP_demoresourcegroup_9929_externalid')]"
-            }
-        },
-        {
             "type": "microsoft.insights/metricAlerts",
             "apiVersion": "2018-03-01",
             "name": "[parameters('metricAlerts_Too_20many_20calls_name')]",
