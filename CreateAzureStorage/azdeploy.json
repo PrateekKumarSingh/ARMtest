@@ -2,162 +2,110 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "alertName": {
-            "type": "string",
-            "defaultValue": "alert",            
-            "minLength": 1,
-            "metadata": {
-                "description": "Name of the alert"
-            }
+        "metricAlerts_Too_20many_20calls_name": {
+            "defaultValue": "Too%20many%20calls",
+            "type": "String"
         },
-        "alertDescription": {
-            "type": "string",
-            "defaultValue": "This is a metric alert",
-            "metadata": {
-                "description": "Description of alert"
-            }
+        "accounts_textanalyticsprateek_name": {
+            "defaultValue": "textanalyticsprateek",
+            "type": "String"
         },
-        "alertSeverity": {
-            "type": "int",
-            "defaultValue": 3,
-            "allowedValues": [
-                0,
-                1,
-                2,
-                3,
-                4
-            ],
-            "metadata": {
-                "description": "Severity of alert {0,1,2,3,4}"
-            }
+        "autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name": {
+            "defaultValue": "ASP-demoresourcegroup-9929-Autoscale-95",
+            "type": "String"
         },
-        "isEnabled": {
-            "type": "bool",
-            "defaultValue": true,
-            "metadata": {
-                "description": "Specifies whether the alert is enabled"
-            }
+        "serverFarms_ASP_demoresourcegroup_9929_externalid": {
+            "defaultValue": "/subscriptions/e5764b37-3dd3-42ee-842d-e1517f5801a9/resourceGroups/demo-resource-group/providers/Microsoft.Web/serverFarms/ASP-demoresourcegroup-9929",
+            "type": "String"
         },
-        "resourceId": {
-            "type": "string",
-            "minLength": 1,
-            "metadata": {
-                "description": "Full Resource ID of the resource emitting the metric that will be used for the comparison. For example /subscriptions/00000000-0000-0000-0000-0000-00000000/resourceGroups/ResourceGroupName/providers/Microsoft.compute/virtualMachines/VM_xyz"
-            }
-        },
-        "metricName": {
-            "type": "string",
-            "minLength": 1,
-            "metadata": {
-                "description": "Name of the metric used in the comparison to activate the alert."
-            }
-        },
-        "operator": {
-            "type": "string",
-            "defaultValue": "GreaterThan",
-            "allowedValues": [
-                "Equals",
-                "NotEquals",
-                "GreaterThan",
-                "GreaterThanOrEqual",
-                "LessThan",
-                "LessThanOrEqual"
-            ],
-            "metadata": {
-                "description": "Operator comparing the current value with the threshold value."
-            }
-        },
-        "threshold": {
-            "type": "string",
-            "defaultValue": "0",
-            "metadata": {
-                "description": "The threshold value at which the alert is activated."
-            }
-        },
-        "timeAggregation": {
-            "type": "string",
-            "defaultValue": "Average",
-            "allowedValues": [
-                "Average",
-                "Minimum",
-                "Maximum",
-                "Total",
-                "Count"
-            ],
-            "metadata": {
-                "description": "How the data that is collected should be combined over time."
-            }
-        },
-        "windowSize": {
-            "type": "string",
-            "defaultValue": "PT5M",
-            "allowedValues": [
-                "PT1M",
-                "PT5M",
-                "PT15M",
-                "PT30M",
-                "PT1H",
-                "PT6H",
-                "PT12H",
-                "PT24H"
-            ],
-            "metadata": {
-                "description": "Period of time used to monitor alert activity based on the threshold. Must be between one minute and one day. ISO 8601 duration format."
-            }
-        },
-        "evaluationFrequency": {
-            "type": "string",
-            "defaultValue": "PT1M",
-            "allowedValues": [
-                "PT1M",
-                "PT5M",
-                "PT15M",
-                "PT30M",
-                "PT1H"
-            ],
-            "metadata": {
-                "description": "how often the metric alert is evaluated represented in ISO 8601 duration format"
-            }
-        },
-        "actionGroupId": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "The ID of the action group that is triggered when the alert is activated or deactivated"
-            }
+        "actiongroups_email_externalid": {
+            "defaultValue": "/subscriptions/e5764b37-3dd3-42ee-842d-e1517f5801a9/resourceGroups/test-resource-group/providers/microsoft.insights/actiongroups/email",
+            "type": "String"
         }
     },
-    "variables": {  },
+    "variables": {},
     "resources": [
         {
-            "name": "alert001",
-            "type": "Microsoft.Insights/metricAlerts",
-            "location": "global",
-            "apiVersion": "2018-03-01",
-            "tags": {},
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2017-04-18",
+            "name": "[parameters('accounts_textanalyticsprateek_name')]",
+            "location": "centralindia",
+            "sku": {
+                "name": "F0"
+            },
+            "kind": "TextAnalytics",
             "properties": {
-                "description": "[parameters('alertDescription')]",
-                "severity": "[parameters('alertSeverity')]",
-                "enabled": "[parameters('isEnabled')]",
-                "scopes": ["[parameters('resourceId')]"],
-                "evaluationFrequency":"[parameters('evaluationFrequency')]",
-                "windowSize": "[parameters('windowSize')]",
+                "customSubDomainName": "[parameters('accounts_textanalyticsprateek_name')]"
+            }
+        },
+        {
+            "type": "microsoft.insights/autoscalesettings",
+            "apiVersion": "2014-04-01",
+            "name": "[parameters('autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name')]",
+            "location": "Southeast Asia",
+            "properties": {
+                "profiles": [
+                    {
+                        "name": "Auto created scale condition",
+                        "capacity": {
+                            "minimum": "1",
+                            "maximum": "2",
+                            "default": "1"
+                        },
+                        "rules": [
+                            {
+                                "metricTrigger": {
+                                    "metricName": "CpuPercentage",
+                                    "metricNamespace": "microsoft.web/serverfarms",
+                                    "metricResourceUri": "[parameters('serverFarms_ASP_demoresourcegroup_9929_externalid')]",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "PT10M",
+                                    "timeAggregation": "Average",
+                                    "operator": "GreaterThan",
+                                    "threshold": 70,
+                                    "dimensions": [],
+                                    "dividePerInstance": false
+                                },
+                                "scaleAction": {
+                                    "direction": "Increase",
+                                    "type": "ChangeCount",
+                                    "value": "1",
+                                    "cooldown": "PT5M"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "enabled": true,
+                "name": "[parameters('autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name')]",
+                "targetResourceUri": "[parameters('serverFarms_ASP_demoresourcegroup_9929_externalid')]"
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Too_20many_20calls_name')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
+            ],
+            "properties": {
+                "description": "too many requests",
+                "severity": 3,
+                "enabled": true,
+                "scopes": [
+                    "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT5M",
                 "criteria": {
-                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
-                    "allOf": [
-                        {
-                            "name" : "1st criterion",
-                            "metricName": "[parameters('metricName')]",
-                            "dimensions":[],
-                            "operator": "[parameters('operator')]",
-                            "threshold" : "[parameters('threshold')]",
-                            "timeAggregation": "[parameters('timeAggregation')]"
-                        }
-                    ]
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
                 },
                 "actions": [
                     {
-                        "actionGroupId": "[parameters('actionGroupId')]"
+                        "actionGroupId": "[parameters('actiongroups_email_externalid')]",
+                        "webHookProperties": {}
                     }
                 ]
             }
