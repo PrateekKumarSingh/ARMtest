@@ -4,6 +4,7 @@
     "parameters": {
         "alertName": {
             "type": "string",
+            "defaultValue": "alert",            
             "minLength": 1,
             "metadata": {
                 "description": "Name of the alert"
