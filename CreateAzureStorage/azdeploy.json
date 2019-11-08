@@ -37,11 +37,39 @@
       },
       "kind": "StorageV2",
       "properties": {}
+    },
+    {
+        "type": "microsoft.insights/metricAlerts",
+        "apiVersion": "2018-03-01",
+        "name": "new alert 1",
+        "location": "global",
+        "dependsOn": [
+            "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
+        ],
+        "properties": {
+            "description": "too many requests",
+            "severity": 3,
+            "enabled": true,
+            "scopes": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
+            ],
+            "evaluationFrequency": "PT1M",
+            "windowSize": "PT5M",
+            "criteria": {
+                "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+            },
+            "actions": [
+                {
+                    "actionGroupId": "/subscriptions/e5764b37-3dd3-42ee-842d-e1517f5801a9/resourceGroups/test-resource-group/providers/microsoft.insights/actiongroups/email",
+                    "webHookProperties": {}
+                }
+            ]
+        }
     }
   ],
   "outputs": {
     "storageAccountName": {
-      "type": "string",
+      "type": "string"
       "value": "[variables('storageAccountName')]"
     }
   }
