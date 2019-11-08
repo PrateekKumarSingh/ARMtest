@@ -2,75 +2,141 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "storageAccountType": {
-        "type": "string",
-        "defaultValue": "Standard_GRS",
-        "allowedValues": [
-          "Standard_LRS",
-          "Standard_GRS",
-          "Standard_ZRS",
-          "Premium_LRS"
-        ],
-        "metadata": {
-          "description": "Storage Account type"
-        }
-      },
-      "location": {
-        "type": "string",
-        "defaultValue": "[resourceGroup().location]",
-        "metadata": {
-          "description": "Location for all resources."
-        }
-      }
-    },
-    "variables": {
-      "storageAccountName": "[concat('store', uniquestring(resourceGroup().id))]"
-    },
-    "resources": [
-      {
-        "type": "Microsoft.Storage/storageAccounts",
-        "name": "[variables('storageAccountName')]",
-        "location": "[parameters('location')]",
-        "apiVersion": "2019-04-01",
-        "sku": {
-          "name": "[parameters('storageAccountType')]"
+        "metricAlerts_Too_20many_20calls_name": {
+            "defaultValue": "Too%20many%20calls",
+            "type": "String"
         },
-        "kind": "StorageV2",
-        "properties": {}
-      },
-      {
-          "type": "microsoft.insights/metricAlerts",
-          "apiVersion": "2018-03-01",
-          "name": "new alert 1",
-          "location": "global",
-          "dependsOn": [
-              "[resourceId('Microsoft.CognitiveServices/accounts','textanalyticsprateek' )]"
-          ],
-          "properties": {
-              "description": "too many requests",
-              "severity": 3,
-              "enabled": true,
-              "scopes": [
-                  "[resourceId('Microsoft.CognitiveServices/accounts', 'textanalyticsprateek')]"
-              ],
-              "evaluationFrequency": "PT1M",
-              "windowSize": "PT5M",
-              "criteria": {
-                  "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
-              },
-              "actions": [
-                  {
-                      "actionGroupId": "/subscriptions/e5764b37-3dd3-42ee-842d-e1517f5801a9/resourceGroups/test-resource-group/providers/microsoft.insights/actiongroups/email",
-                      "webHookProperties": {}
-                  }
-              ]
-          }
-      }
-    ],
-    "outputs": {
-      "storageAccountName": {
-        "type": "string"
-        "value": "[variables('storageAccountName')]"
-      }
-    }
-  }
+        "accounts_textanalyticsprateek_name": {
+            "defaultValue": "textanalyticsprateek",
+            "type": "String"
+        },
+        "autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name": {
+            "defaultValue": "ASP-demoresourcegroup-9929-Autoscale-95",
+            "type": "String"
+        },
+        "serverFarms_ASP_demoresourcegroup_9929_externalid": {
+            "defaultValue": "/subscriptions/e5764b37-3dd3-42ee-842d-e1517f5801a9/resourceGroups/demo-resource-group/providers/Microsoft.Web/serverFarms/ASP-demoresourcegroup-9929",
+            "type": "String"
+        },
+        "actiongroups_email_externalid": {
+            "defaultValue": "/subscriptions/e5764b37-3dd3-42ee-842d-e1517f5801a9/resourceGroups/test-resource-group/providers/microsoft.insights/actiongroups/email",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2017-04-18",
+            "name": "[parameters('accounts_textanalyticsprateek_name')]",
+            "location": "centralindia",
+            "sku": {
+                "name": "F0"
+            },
+            "kind": "TextAnalytics",
+            "properties": {
+                "customSubDomainName": "[parameters('accounts_textanalyticsprateek_name')]"
+            }
+        },
+        {
+            "type": "microsoft.insights/autoscalesettings",
+            "apiVersion": "2014-04-01",
+            "name": "[parameters('autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name')]",
+            "location": "Southeast Asia",
+            "properties": {
+                "profiles": [
+                    {
+                        "name": "Auto created scale condition",
+                        "capacity": {
+                            "minimum": "1",
+                            "maximum": "2",
+                            "default": "1"
+                        },
+                        "rules": [
+                            {
+                                "metricTrigger": {
+                                    "metricName": "CpuPercentage",
+                                    "metricNamespace": "microsoft.web/serverfarms",
+                                    "metricResourceUri": "[parameters('serverFarms_ASP_demoresourcegroup_9929_externalid')]",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "PT10M",
+                                    "timeAggregation": "Average",
+                                    "operator": "GreaterThan",
+                                    "threshold": 70,
+                                    "dimensions": [],
+                                    "dividePerInstance": false
+                                },
+                                "scaleAction": {
+                                    "direction": "Increase",
+                                    "type": "ChangeCount",
+                                    "value": "1",
+                                    "cooldown": "PT5M"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "enabled": true,
+                "name": "[parameters('autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name')]",
+                "targetResourceUri": "[parameters('serverFarms_ASP_demoresourcegroup_9929_externalid')]"
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Too_20many_20calls_name')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
+            ],
+            "properties": {
+                "description": "too many requests",
+                "severity": 3,
+                "enabled": true,
+                "scopes": [
+                    "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT5M",
+                "criteria": {
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actiongroups_email_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "new",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
+            ],
+            "properties": {
+                "description": "too many requests",
+                "severity": 3,
+                "enabled": true,
+                "scopes": [
+                    "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT5M",
+                "criteria": {
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actiongroups_email_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        }
+    ]
+}
