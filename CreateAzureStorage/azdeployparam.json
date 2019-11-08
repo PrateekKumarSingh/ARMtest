@@ -11,9 +11,6 @@
         "autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name": {
             "value": "autos"
         },
-        "serverFarms_ASP_demoresourcegroup_9929_externalid": {
-            "value": null
-        },
         "actiongroups_email_externalid": {
             "value": null
         }
