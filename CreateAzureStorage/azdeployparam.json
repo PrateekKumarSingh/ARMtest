@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "metricAlerts_Too_20many_20calls_name": {
-            "value": null
+            "value": "too many"
         },
         "accounts_textanalyticsprateek_name": {
-            "value": null
+            "value": "textanalyticsprateek"
         },
         "autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name": {
-            "value": null
+            "value": "autos"
         },
         "serverFarms_ASP_demoresourcegroup_9929_externalid": {
             "value": null
