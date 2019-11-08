@@ -2,24 +2,12 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "metricAlerts_Too_20many_20calls_name": {
-            "defaultValue": "Too%20many%20calls",
+        "actionGroups_email_name": {
+            "defaultValue": "email",
             "type": "String"
         },
         "accounts_textanalyticsprateek_name": {
             "defaultValue": "textanalyticsprateek",
-            "type": "String"
-        },
-        "autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name": {
-            "defaultValue": "ASP-demoresourcegroup-9929-Autoscale-95",
-            "type": "String"
-        },
-        "serverFarms_ASP_demoresourcegroup_9929_externalid": {
-            "defaultValue": "/subscriptions/e5764b37-3dd3-42ee-842d-e1517f5801a9/resourceGroups/demo-resource-group/providers/Microsoft.Web/serverFarms/ASP-demoresourcegroup-9929",
-            "type": "String"
-        },
-        "actiongroups_email_externalid": {
-            "defaultValue": "/subscriptions/e5764b37-3dd3-42ee-842d-e1517f5801a9/resourceGroups/test-resource-group/providers/microsoft.insights/actiongroups/email",
             "type": "String"
         }
     },
@@ -39,59 +27,28 @@
             }
         },
         {
-            "type": "microsoft.insights/metricAlerts",
-            "apiVersion": "2018-03-01",
-            "name": "[parameters('metricAlerts_Too_20many_20calls_name')]",
-            "location": "global",
-            "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
-            ],
+            "type": "microsoft.insights/actionGroups",
+            "apiVersion": "2019-03-01",
+            "name": "[parameters('actionGroups_email_name')]",
+            "location": "Global",
             "properties": {
-                "description": "too many requests",
-                "severity": 3,
+                "groupShortName": "em",
                 "enabled": true,
-                "scopes": [
-                    "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
-                ],
-                "evaluationFrequency": "PT1M",
-                "windowSize": "PT5M",
-                "criteria": {
-                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
-                },
-                "actions": [
+                "emailReceivers": [
                     {
-                        "actionGroupId": "[parameters('actiongroups_email_externalid')]",
-                        "webHookProperties": {}
+                        "name": "[concat(parameters('actionGroups_email_name'), '_-EmailAction-')]",
+                        "emailAddress": "prateeksingh1590@gmail.com",
+                        "useCommonAlertSchema": false
                     }
-                ]
-            }
-        },
-        {
-            "type": "microsoft.insights/metricAlerts",
-            "apiVersion": "2018-03-01",
-            "name": "newest",
-            "location": "global",
-            "dependsOn": [
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
-            ],
-            "properties": {
-                "description": "too many requests",
-                "severity": 3,
-                "enabled": true,
-                "scopes": [
-                    "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
                 ],
-                "evaluationFrequency": "PT1M",
-                "windowSize": "PT5M",
-                "criteria": {
-                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
-                },
-                "actions": [
-                    {
-                        "actionGroupId": "[parameters('actiongroups_email_externalid')]",
-                        "webHookProperties": {}
-                    }
-                ]
+                "smsReceivers": [],
+                "webhookReceivers": [],
+                "itsmReceivers": [],
+                "azureAppPushReceivers": [],
+                "automationRunbookReceivers": [],
+                "voiceReceivers": [],
+                "logicAppReceivers": [],
+                "azureFunctionReceivers": []
             }
         }
     ]
