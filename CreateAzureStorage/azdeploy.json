@@ -1,76 +1,76 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "storageAccountType": {
-      "type": "string",
-      "defaultValue": "Standard_GRS",
-      "allowedValues": [
-        "Standard_LRS",
-        "Standard_GRS",
-        "Standard_ZRS",
-        "Premium_LRS"
-      ],
-      "metadata": {
-        "description": "Storage Account type"
-      }
-    },
-    "location": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]",
-      "metadata": {
-        "description": "Location for all resources."
-      }
-    }
-  },
-  "variables": {
-    "storageAccountName": "[concat('store', uniquestring(resourceGroup().id))]"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')]",
-      "location": "[parameters('location')]",
-      "apiVersion": "2019-04-01",
-      "sku": {
-        "name": "[parameters('storageAccountType')]"
-      },
-      "kind": "StorageV2",
-      "properties": {}
-    },
-    {
-        "type": "microsoft.insights/metricAlerts",
-        "apiVersion": "2018-03-01",
-        "name": "new alert 1",
-        "location": "global",
-        "dependsOn": [
-            "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "storageAccountType": {
+        "type": "string",
+        "defaultValue": "Standard_GRS",
+        "allowedValues": [
+          "Standard_LRS",
+          "Standard_GRS",
+          "Standard_ZRS",
+          "Premium_LRS"
         ],
-        "properties": {
-            "description": "too many requests",
-            "severity": 3,
-            "enabled": true,
-            "scopes": [
-                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
-            ],
-            "evaluationFrequency": "PT1M",
-            "windowSize": "PT5M",
-            "criteria": {
-                "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
-            },
-            "actions": [
-                {
-                    "actionGroupId": "/subscriptions/e5764b37-3dd3-42ee-842d-e1517f5801a9/resourceGroups/test-resource-group/providers/microsoft.insights/actiongroups/email",
-                    "webHookProperties": {}
-                }
-            ]
+        "metadata": {
+          "description": "Storage Account type"
         }
-    }
-  ],
-  "outputs": {
-    "storageAccountName": {
-      "type": "string"
-      "value": "[variables('storageAccountName')]"
+      },
+      "location": {
+        "type": "string",
+        "defaultValue": "[resourceGroup().location]",
+        "metadata": {
+          "description": "Location for all resources."
+        }
+      }
+    },
+    "variables": {
+      "storageAccountName": "[concat('store', uniquestring(resourceGroup().id))]"
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Storage/storageAccounts",
+        "name": "[variables('storageAccountName')]",
+        "location": "[parameters('location')]",
+        "apiVersion": "2019-04-01",
+        "sku": {
+          "name": "[parameters('storageAccountType')]"
+        },
+        "kind": "StorageV2",
+        "properties": {}
+      },
+      {
+          "type": "microsoft.insights/metricAlerts",
+          "apiVersion": "2018-03-01",
+          "name": "new alert 1",
+          "location": "global",
+          "dependsOn": [
+              "[resourceId('Microsoft.CognitiveServices/accounts','textanalyticsprateek' )]"
+          ],
+          "properties": {
+              "description": "too many requests",
+              "severity": 3,
+              "enabled": true,
+              "scopes": [
+                  "[resourceId('Microsoft.CognitiveServices/accounts', 'textanalyticsprateek')]"
+              ],
+              "evaluationFrequency": "PT1M",
+              "windowSize": "PT5M",
+              "criteria": {
+                  "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+              },
+              "actions": [
+                  {
+                      "actionGroupId": "/subscriptions/e5764b37-3dd3-42ee-842d-e1517f5801a9/resourceGroups/test-resource-group/providers/microsoft.insights/actiongroups/email",
+                      "webHookProperties": {}
+                  }
+              ]
+          }
+      }
+    ],
+    "outputs": {
+      "storageAccountName": {
+        "type": "string"
+        "value": "[variables('storageAccountName')]"
+      }
     }
   }
-}
