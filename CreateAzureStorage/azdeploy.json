@@ -129,7 +129,7 @@
     "variables": {  },
     "resources": [
         {
-            "name": "[parameters('alertName')]",
+            "name": "alert001",
             "type": "Microsoft.Insights/metricAlerts",
             "location": "global",
             "apiVersion": "2018-03-01",
