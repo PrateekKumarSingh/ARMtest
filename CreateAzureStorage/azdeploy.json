@@ -113,7 +113,7 @@
         {
             "type": "microsoft.insights/metricAlerts",
             "apiVersion": "2018-03-01",
-            "name": "new",
+            "name": "newest",
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_textanalyticsprateek_name'))]"
