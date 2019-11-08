@@ -2,35 +2,20 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "alertName": {
-            "value": "New Metric Alert"
+        "metricAlerts_Too_20many_20calls_name": {
+            "value": null
         },
-        "alertDescription": {
-            "value": "New metric alert created via template"
+        "accounts_textanalyticsprateek_name": {
+            "value": null
         },
-        "alertSeverity": {
-            "value":3
+        "autoscalesettings_ASP_demoresourcegroup_9929_Autoscale_95_name": {
+            "value": null
         },
-        "isEnabled": {
-            "value": true
+        "serverFarms_ASP_demoresourcegroup_9929_externalid": {
+            "value": null
         },
-        "resourceId": {
-            "value": "/subscriptions/replace-with-subscription-id/resourceGroups/replace-with-resourceGroup-name/providers/Microsoft.Compute/virtualMachines/replace-with-resource-name"
-        },
-        "metricName": {
-            "value": "Percentage CPU"
-        },
-        "operator": {
-          "value": "GreaterThan"
-        },
-        "threshold": {
-            "value": "80"
-        },
-        "timeAggregation": {
-            "value": "Average"
-        },
-        "actionGroupId": {
-            "value": "/subscriptions/replace-with-subscription-id/resourceGroups/resource-group-name/providers/Microsoft.Insights/actionGroups/replace-with-action-group"
+        "actiongroups_email_externalid": {
+            "value": null
         }
     }
 }
